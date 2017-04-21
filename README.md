@@ -15,8 +15,6 @@ Il faut donc installer l'apk sur le terminal, vérifier d'avoir autorisé les so
 
 Après démarrage de l'application, il est possible d'ajouter le composantsur wcomp en suivant la méthode décrite sur le wiki oppocampus.
 
-Cette application ne présente pas d'interface graphique, c'est un service en arrière plan. TODO: éteindre le service après une certaine période.
-
 
 ATTENTION: -redémarrer l'application fait changer l'UID du composant, il faut donc le rajouter sur wcomp à nouveau.(ce problème sera réglé utltérieurement).
 
