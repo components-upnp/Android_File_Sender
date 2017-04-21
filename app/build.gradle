@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+ext {
+    jettyVersion = "8.1.8.v20121106"
+    eslf4jVersion = "1.6.1"
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.example.comkostiuk.android_audio_recorder_server"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+}
+
+repositories {
+    maven {
+        url "http://4thline.org/m2"
+    }
+}
+
+dependencies {
+    compile 'com.shamanland:xdroid-toaster:0.0.10'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    testCompile 'junit:junit:4.12'
+
+    testCompile 'org.mockito:mockito-core:2.7.22'
+    // required if you want to use Mockito for Android tests
+    androidTestCompile 'org.mockito:mockito-android:2.7.22'
+
+
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'org.fourthline.cling:cling-core:2.0.1'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: jettyVersion
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: jettyVersion
+    compile group: 'org.eclipse.jetty', name: 'jetty-client', version: jettyVersion
+    compile group: 'org.slf4j', name: 'slf4j-api', version: eslf4jVersion
+}
