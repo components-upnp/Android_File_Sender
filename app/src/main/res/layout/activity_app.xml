@@ -9,4 +9,11 @@
         android:layout_height="wrap_content"
         android:onClick="sendAudio"
         android:text="SEND" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="STOP" />
 </LinearLayout>
