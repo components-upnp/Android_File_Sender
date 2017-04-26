@@ -50,6 +50,7 @@ public class Sender implements Runnable {
             }
         }
 
+        service.getManager().getImplementation().setFile("fin");
         System.err.println("Fin envoie");
 
        try {

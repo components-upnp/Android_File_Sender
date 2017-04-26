@@ -56,9 +56,6 @@ public class Server implements Runnable {
                 new Thread(new Sender(socket, service, context)).start();
             }
 
-            service.getManager().getImplementation()
-                    .setFile("");
-
 
             socketServer.close();
 
@@ -92,7 +89,6 @@ public class Server implements Runnable {
             }
 
         } catch (SocketException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             ip += "Something Wrong! " + e.toString() + "\n";
         }

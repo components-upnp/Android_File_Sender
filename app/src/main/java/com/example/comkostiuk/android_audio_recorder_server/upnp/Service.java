@@ -35,7 +35,7 @@ public class Service {
                 if (remoteControllerService == null) {
                     try {
                         System.err.println("CREATION DEVICE!!!");
-                        udnRecorder = new UDN(UUID.randomUUID());
+                        udnRecorder = new SaveUDN().getUdn();
                         LocalDevice remoteDevice = FileSenderDevice.createDevice(udnRecorder);
 
                         upnpService.getRegistry().addDevice(remoteDevice);
