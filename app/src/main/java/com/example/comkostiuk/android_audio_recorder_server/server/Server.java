@@ -3,6 +3,7 @@ package com.example.comkostiuk.android_audio_recorder_server.server;
 import android.content.Context;
 
 import com.example.comkostiuk.android_audio_recorder_server.upnp.FileSenderController;
+import com.example.comkostiuk.android_audio_recorder_server.xml.GenerateurXml;
 
 import org.fourthline.cling.model.meta.LocalService;
 
@@ -15,6 +16,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Enumeration;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import xdroid.toaster.Toaster;
 
@@ -29,12 +33,14 @@ public class Server extends Thread {
     private LocalService<FileSenderController> service;
     private volatile boolean running;
     private String pathFile;
+    private String udn;
 
-    public Server(LocalService<FileSenderController> s, Context c, boolean r, String path) {
+    public Server(String u, LocalService<FileSenderController> s, Context c, boolean r, String path) {
         service = s;
         context = c;
         running = r;
         pathFile = path;
+        udn = u;
     }
 
 
@@ -49,9 +55,8 @@ public class Server extends Thread {
             Socket socket = null;
             socketServer.setSoTimeout(50);
 
-            new File(pathFile).getName();
             service.getManager().getImplementation()
-                    .setFile(getIpAddress());
+                    .setFile(new GenerateurXml().getDocXml(udn, getIpAddress(), new File(pathFile).getName()));
 
             System.err.println("Addresse: "+ getIpAddress());
 
@@ -77,6 +82,10 @@ public class Server extends Thread {
             Thread.currentThread().interrupt();
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
     }

@@ -83,4 +83,8 @@ public class Service {
     public ServiceConnection getService() {
         return serviceConnection;
     }
+
+    public UDN getUdnRecorder() {
+        return udnRecorder;
+    }
 }

@@ -109,7 +109,7 @@ public class AppService extends Service {
                                                 if (evt.getPropertyName().equals("path")) {
                                                     if (s == null) {
                                                         running = true;
-                                                        s = new Server(fileSenderService, context, running, pathFile);
+                                                        s = new Server(service.getUdnRecorder().toString(),fileSenderService, context, running, pathFile);
                                                         s.start();
                                                     }
                                                     else {
