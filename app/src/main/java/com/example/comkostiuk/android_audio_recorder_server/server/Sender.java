@@ -2,11 +2,13 @@ package com.example.comkostiuk.android_audio_recorder_server.server;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Environment;
 
 import com.example.comkostiuk.android_audio_recorder_server.upnp.FileSenderController;
 
 import org.fourthline.cling.model.meta.LocalService;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,13 +27,14 @@ public class Sender implements Runnable {
     private InputStream in;
     private byte[] buffer;
 
-    public Sender(Socket s, LocalService<FileSenderController> ser, Context c) throws IOException {
+    public Sender(Socket s, LocalService<FileSenderController> ser, Context c, String path) throws IOException {
         socket = s;
         context = c;
         service = ser;
         out = socket.getOutputStream();
-        in = context.getAssets().open("test.mp3");
+        in = new FileInputStream(path);
         buffer = new byte[1024];
+
     }
 
     @Override

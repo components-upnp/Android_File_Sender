@@ -6,29 +6,35 @@ import com.example.comkostiuk.android_audio_recorder_server.upnp.FileSenderContr
 
 import org.fourthline.cling.model.meta.LocalService;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Enumeration;
+
+import xdroid.toaster.Toaster;
 
 /**
  * Created by mkostiuk on 24/04/2017.
  */
 
-public class Server implements Runnable {
+public class Server extends Thread {
 
     private ServerSocket socketServer;
     private Context context;
     private LocalService<FileSenderController> service;
     private volatile boolean running;
+    private String pathFile;
 
-    public Server(LocalService<FileSenderController> s, Context c, boolean r) {
+    public Server(LocalService<FileSenderController> s, Context c, boolean r, String path) {
         service = s;
         context = c;
         running = r;
+        pathFile = path;
     }
 
 
@@ -40,8 +46,10 @@ public class Server implements Runnable {
             System.err.println("Demarrage du serveur");
 
             socketServer = new ServerSocket(10302);
-            Socket socket;
+            Socket socket = null;
+            socketServer.setSoTimeout(50);
 
+            new File(pathFile).getName();
             service.getManager().getImplementation()
                     .setFile(getIpAddress());
 
@@ -50,18 +58,25 @@ public class Server implements Runnable {
 
             Thread.sleep(200);
             service.getManager().getImplementation().setSending(true);
-            while (running) {
+            while (!Thread.interrupted()) {
                 System.err.println("En attente de connexion");
-                socket = socketServer.accept();
-                new Thread(new Sender(socket, service, context)).start();
+                try {
+                    socket = socketServer.accept();
+                    new Thread(new Sender(socket, service, context, pathFile)).start();
+                } catch (SocketTimeoutException e) {
+                    System.err.println("Server socket time out!!!");
+                }
+
             }
-
-
+            if (socket != null)
+                socket.close();
             socketServer.close();
+            Thread.currentThread().interrupt();
 
-        } catch (IOException e) {
+        }  catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -93,5 +108,9 @@ public class Server implements Runnable {
             ip += "Something Wrong! " + e.toString() + "\n";
         }
         return ip;
+    }
+
+    public void setPathFile(String p) {
+        pathFile = p;
     }
 }

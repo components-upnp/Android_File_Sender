@@ -68,6 +68,18 @@ public class Service {
                 remoteDevice.findService(new UDAServiceType("FileSenderController", 1));
     }
 
+    public LocalService<FileToSendService> getFileToSendLocalService() {
+        if (upnpService == null)
+            return null;
+
+        LocalDevice remoteDevice;
+        if ((remoteDevice = upnpService.getRegistry().getLocalDevice(udnRecorder, true)) == null)
+            return null;
+
+        return (LocalService<FileToSendService>)
+                remoteDevice.findService(new UDAServiceType("FileToSendServicer", 1));
+    }
+
     public ServiceConnection getService() {
         return serviceConnection;
     }

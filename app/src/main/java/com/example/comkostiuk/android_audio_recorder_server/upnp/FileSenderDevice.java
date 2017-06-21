@@ -29,7 +29,7 @@ public class FileSenderDevice {
                 new DeviceDetails(
                         "Android File Sender",
                         new ManufacturerDetails("IRIT"),
-                        new ModelDetails("AndroidController", "Envoie un fichier", "v1")
+                        new ModelDetails("AndroidController", "Envoie un fichier correspondant à un chemin donné", "v1")
                 );
 
         LocalService service =
@@ -39,12 +39,18 @@ public class FileSenderDevice {
                 new DefaultServiceManager<>(service, FileSenderController.class)
         );
 
+        LocalService<FileToSendService> fileToSendService =
+                new AnnotationLocalServiceBinder().read(FileToSendService.class);
+        fileToSendService.setManager(
+                new DefaultServiceManager<FileToSendService>(fileToSendService, FileToSendService.class)
+        );
+
         return new LocalDevice(
                 new DeviceIdentity(udn),
                 type,
                 details,
 
-                service
+                new LocalService[] {service, fileToSendService}
         );
     }
 }

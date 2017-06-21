@@ -4,15 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    tools:context="com.example.comkostiuk.android_audio_recorder_server.App"
+    tools:context="com.example.comkostiuk.android_audio_recorder_server.main.App"
     android:id="@+id/activity_app">
 
-    <Button
-        android:id="@+id/sendButton"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.09"
-        android:onClick="sendAudio"
-        android:text="SEND" />
+
 </LinearLayout>

@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".App">
+        <activity android:name=".main.App">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +24,20 @@
             </intent-filter>
         </activity>
         <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
+
+        <service android:name=".main.AppService">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".main.AppService$NotificationActionService" android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_1"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
