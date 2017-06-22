@@ -60,6 +60,8 @@ public class AppService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Thread().start();
 
+        displayNotification(this);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
         StrictMode.setThreadPolicy(policy);
@@ -108,7 +110,11 @@ public class AppService extends Service {
                                             public void propertyChange(PropertyChangeEvent evt) {
                                                 if (evt.getPropertyName().equals("path")) {
                                                     if (s == null) {
+                                                        service.getRecorderLocalService().getManager().getImplementation()
+                                                                .setSending(false);
                                                         running = true;
+                                                        pathFile = (String) evt.getNewValue();
+                                                        pause(500);
                                                         s = new Server(service.getUdnRecorder().toString(),fileSenderService, context, running, pathFile);
                                                         s.start();
                                                     }
@@ -121,7 +127,7 @@ public class AppService extends Service {
                                 );
                     }
                 },
-                3000
+                5000
         );
 
         return START_NOT_STICKY;
@@ -177,6 +183,14 @@ public class AppService extends Service {
 
                 System.exit(0);
             }
+        }
+    }
+
+    public static void pause(long ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
         }
     }
 

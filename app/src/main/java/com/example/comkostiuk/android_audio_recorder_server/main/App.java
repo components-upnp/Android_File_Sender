@@ -21,6 +21,7 @@ public class App extends AppCompatActivity {
 
         setContentView(R.layout.activity_app);
         startService(new Intent(this, AppService.class));
+        finish();
     }
 
 

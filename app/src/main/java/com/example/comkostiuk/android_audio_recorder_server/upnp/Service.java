@@ -77,7 +77,7 @@ public class Service {
             return null;
 
         return (LocalService<FileToSendService>)
-                remoteDevice.findService(new UDAServiceType("FileToSendServicer", 1));
+                remoteDevice.findService(new UDAServiceType("FileToSendService", 1));
     }
 
     public ServiceConnection getService() {
