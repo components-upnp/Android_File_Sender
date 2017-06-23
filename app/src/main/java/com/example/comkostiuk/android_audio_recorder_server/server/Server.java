@@ -60,9 +60,6 @@ public class Server extends Thread {
 
             System.err.println("Addresse: "+ getIpAddress());
 
-
-            Thread.sleep(200);
-            service.getManager().getImplementation().setSending(true);
             while (!Thread.interrupted()) {
                 System.err.println("En attente de connexion");
                 try {
@@ -78,10 +75,7 @@ public class Server extends Thread {
             socketServer.close();
             Thread.currentThread().interrupt();
 
-        }  catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -119,7 +113,11 @@ public class Server extends Thread {
         return ip;
     }
 
-    public void setPathFile(String p) {
+    public void setPathFile(String p) throws TransformerException, ParserConfigurationException {
+
         pathFile = p;
+
+        service.getManager().getImplementation()
+                .setFile(new GenerateurXml().getDocXml(udn, getIpAddress(), new File(pathFile).getName()));
     }
 }

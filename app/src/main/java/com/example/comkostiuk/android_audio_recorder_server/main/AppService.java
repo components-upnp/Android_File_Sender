@@ -29,6 +29,9 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import xdroid.toaster.Toaster;
 
 /**
@@ -109,17 +112,21 @@ public class AppService extends Service {
                                             @Override
                                             public void propertyChange(PropertyChangeEvent evt) {
                                                 if (evt.getPropertyName().equals("path")) {
+                                                    pathFile = (String) evt.getNewValue();
                                                     if (s == null) {
-                                                        service.getRecorderLocalService().getManager().getImplementation()
-                                                                .setSending(false);
                                                         running = true;
-                                                        pathFile = (String) evt.getNewValue();
                                                         pause(500);
                                                         s = new Server(service.getUdnRecorder().toString(),fileSenderService, context, running, pathFile);
                                                         s.start();
                                                     }
                                                     else {
-                                                        s.setPathFile(pathFile);
+                                                        try {
+                                                            s.setPathFile(pathFile);
+                                                        } catch (TransformerException e) {
+                                                            e.printStackTrace();
+                                                        } catch (ParserConfigurationException e) {
+                                                            e.printStackTrace();
+                                                        }
                                                     }
                                                 }
                                             }
