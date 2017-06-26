@@ -29,21 +29,9 @@ public class FileSenderController {
         return propertyChangeSupport;
     }
 
-    @UpnpStateVariable(defaultValue = "false", sendEvents = true)
-    private boolean sending = false;
 
     @UpnpStateVariable(defaultValue = "null")
     private String file = null;
-
-
-    @UpnpAction
-    public void setSending(@UpnpInputArgument(name = "NewSendingValue") boolean newSendingValue) {
-        boolean oldValue = sending;
-        sending = newSendingValue;
-
-        getPropertyChangeSupport().firePropertyChange("Sending",oldValue,sending);
-
-    }
 
     @UpnpAction
     public void setFile(@UpnpInputArgument(name = "NewFileValue") String newFileValue) {

@@ -3,32 +3,44 @@ package com.example.comkostiuk.android_audio_recorder_server.server;
 import android.content.Context;
 
 import com.example.comkostiuk.android_audio_recorder_server.upnp.FileSenderController;
+import com.example.comkostiuk.android_audio_recorder_server.xml.GenerateurXml;
 
 import org.fourthline.cling.model.meta.LocalService;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Enumeration;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import xdroid.toaster.Toaster;
 
 /**
  * Created by mkostiuk on 24/04/2017.
  */
 
-public class Server implements Runnable {
+public class Server extends Thread {
 
     private ServerSocket socketServer;
     private Context context;
     private LocalService<FileSenderController> service;
     private volatile boolean running;
+    private String pathFile;
+    private String udn;
 
-    public Server(LocalService<FileSenderController> s, Context c, boolean r) {
+    public Server(String u, LocalService<FileSenderController> s, Context c, boolean r, String path) {
         service = s;
         context = c;
         running = r;
+        pathFile = path;
+        udn = u;
     }
 
 
@@ -40,28 +52,34 @@ public class Server implements Runnable {
             System.err.println("Demarrage du serveur");
 
             socketServer = new ServerSocket(10302);
-            Socket socket;
+            Socket socket = null;
+            socketServer.setSoTimeout(50);
 
             service.getManager().getImplementation()
-                    .setFile(getIpAddress());
+                    .setFile(new GenerateurXml().getDocXml(udn, getIpAddress(), new File(pathFile).getName()));
 
             System.err.println("Addresse: "+ getIpAddress());
 
-
-            Thread.sleep(200);
-            service.getManager().getImplementation().setSending(true);
-            while (running) {
+            while (!Thread.interrupted()) {
                 System.err.println("En attente de connexion");
-                socket = socketServer.accept();
-                new Thread(new Sender(socket, service, context)).start();
+                try {
+                    socket = socketServer.accept();
+                    new Thread(new Sender(socket, service, context, pathFile)).start();
+                } catch (SocketTimeoutException e) {
+                    System.err.println("Server socket time out!!!");
+                }
+
             }
-
-
+            if (socket != null)
+                socket.close();
             socketServer.close();
+            Thread.currentThread().interrupt();
 
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
     }
@@ -93,5 +111,13 @@ public class Server implements Runnable {
             ip += "Something Wrong! " + e.toString() + "\n";
         }
         return ip;
+    }
+
+    public void setPathFile(String p) throws TransformerException, ParserConfigurationException {
+
+        pathFile = p;
+
+        service.getManager().getImplementation()
+                .setFile(new GenerateurXml().getDocXml(udn, getIpAddress(), new File(pathFile).getName()));
     }
 }

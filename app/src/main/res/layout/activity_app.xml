@@ -4,31 +4,5 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="sendAudio"
-        android:text="SEND" />
 
-    <Button
-        android:id="@+id/stop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="stop"
-        android:text="STOP" />
-
-    <Button
-        android:id="@+id/endRecord"
-        android:layout_width="147dp"
-        android:layout_height="wrap_content"
-        android:text="END RECORD" />
-
-    <Button
-        android:id="@+id/record"
-        style="@android:style/Widget.Material.Light.Button.Small"
-        android:layout_width="173dp"
-        android:layout_height="0dp"
-        android:text="RECORD"
-        android:layout_weight="0.19" />
 </LinearLayout>
