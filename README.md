@@ -5,11 +5,10 @@ Composant UPnP permettant à un terminal Android d'envoyer un fichier
 
 Ce composant permet à l'utilisateur d'envoyer un fichier à un autre composant connecté au réseau, on peut imaginer par exmemple
 qu'un professeur envoie des explications audios du cours aux étudiants connectés. Le transfert des fichiers se fait grâce à un serveur via des sockets JAVA.
-HTTP. Ici le protocole UPnP servira surtout à à gérer les abonnements des composants clients.
+Ici le protocole UPnP servira surtout à à gérer les abonnements des composants clients.
 
-L'interface graphique est composée de deux boutons: SEND et STOP. Le premier sert à lancer le serveur qui va pouvoir transmettre le fichier aux clients, le deuxième sert à stoper le serveur.
-
-On ajoutera par la suite des boutons afin d'enregistrer un fichier audio, qui pourra par la suite être transmis.
+L'application étant un service Android elle ne présente pas d'interface graphique. Elle enverra le fichier spécifié lors 
+de la réception d'un message UPnP contenant le chemin de celui-ci.
 
 <strong>Lancement de l'application: </strong>
 
@@ -19,25 +18,24 @@ Il faut donc installer l'apk sur le terminal, vérifier d'avoir autorisé les so
 
 Après démarrage de l'application, il est possible d'ajouter le composantsur wcomp en suivant la méthode décrite sur le wiki oppocampus.
 
+<strong>Spécification UPnP: </strong>
 
-ATTENTION: -redémarrer l'application fait changer l'UID du composant, il faut donc le rajouter sur wcomp à nouveau.(ce problème sera réglé utltérieurement).
+Ce composant offre deux services dont voici leur description:
 
-<strong>Spécification UPnP:</strong>
-
-Ce composant offre l'interface UPnP FileSenderController dont voici la description:
-
-  1) setSending(boolean newSendingValue): permet de définir l'état du serveur (eteint ou allumé).
-  2) setAddresse(String newAddresseValue): permet de définir l'addresse du serveur à transmettre aux clients.
+  a) FileSenderService 
   
-Ce composant envoie les évènements suivants:
-
-  1) SendingEvent lorsque le serveur change d'état (allumé/éteint)
-  2) AddresseEvent lors du démarrage du serveur afin de trasnmettre l'addresse de ce dernier aux clients abonnés.
+    1) setFile(String newFileValue) : transmet par fichier XML l'UDN du composant émetteur, le nom du fichier envoyé ainsi que l'adresse 
+  IP du serveur. Le fichier XML est transmis via un événement UPnP dont le nom est "File".
+  
+  b) FileToSendService :
+  
+    1) setPathFile(String NewPathFileValue) : cette action UPnP reçoit un fichier XML contenant l'UDN du composant qui a 
+    envoyé le message ainsi que le chemin du fichier à envoyer. Le chemin est ensuite transmis à l'application.
   
 
 Voici le schéma correspondant à ce composant:
 
-![alt tag](https://github.com/components-upnp/Android_File_Sender/blob/master/File_Sender.png)
+![alt tag](https://github.com/components-upnp/Android_File_Sender/blob/master/Android_File_Sender.png)
 
 <strong>Maintenance:</strong>
 
